@@ -34,6 +34,7 @@ namespace Dnn.CakeUtils.Manifest
         public static XmlNode ToXml(this DnnModuleDefinition control, XmlNode parent)
         {
             var newNode = parent.AddChildElement("moduleDefinition");
+            newNode.AddChildElement("definitionName", control.definitionName);
             newNode.AddChildElement("friendlyName", control.friendlyName);
             newNode.AddChildElement("defaultCacheTime", control.defaultCacheTime.ToString());
             if (control.moduleControls != null && control.moduleControls.Length > 0)
@@ -45,18 +46,36 @@ namespace Dnn.CakeUtils.Manifest
                 }
                 newNode.AppendChild(modcs);
             }
+            if (control.permissions != null && control.permissions.Length > 0)
+            {
+                var perms = newNode.AddChildElement("permissions");
+                foreach (var p in control.permissions)
+                {
+                    perms.AppendChild(p.ToXml(perms));
+                }
+                newNode.AppendChild(perms);
+            }
             return newNode;
         }
         public static XmlNode ToXml(this DnnModuleControl control, XmlNode parent)
         {
             var newNode = parent.AddChildElement("moduleControl");
             newNode.AddChildElement("controlKey", control.controlKey == null ? "" : control.controlKey);
+            newNode.AddChildElementIfNotNull("controlTitle", control.controlTitle);
             newNode.AddChildElementIfNotNull("controlSrc", control.controlSrc);
             newNode.AddChildElementIfNotNull("supportsPartialRendering", control.supportsPartialRendering);
             newNode.AddChildElementIfNotNull("controlType", control.controlType);
             newNode.AddChildElementIfNotNull("iconFile", control.iconFile);
             newNode.AddChildElementIfNotNull("helpUrl", control.helpUrl);
             newNode.AddChildElementIfNotNull("viewOrder", control.viewOrder.ToString());
+            return newNode;
+        }
+        public static XmlNode ToXml(this DnnModulePermission permission, XmlNode parent)
+        {
+            var newNode = parent.AddChildElement("permission");
+            newNode.AddAttribute("code", permission.code);
+            newNode.AddAttribute("key", permission.key);
+            newNode.AddAttribute("name", permission.name);
             return newNode;
         }
     }

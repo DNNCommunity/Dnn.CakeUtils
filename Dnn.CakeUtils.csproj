@@ -6,6 +6,8 @@
     <Authors>DNN Community</Authors>
     <Description>Utilities to support Cake scripts for building and packaging DNN extensions</Description>
     <PackageProjectUrl>https://github.com/DNNCommunity/Dnn.CakeUtils</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/DNNCommunity/Dnn.CakeUtils/blob/master/LICENSE</PackageLicenseUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

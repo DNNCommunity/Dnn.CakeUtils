@@ -30,20 +30,30 @@ namespace Dnn.CakeUtils
 
     public class DnnModuleDefinition
     {
+        public string definitionName { get; set; }
         public string friendlyName { get; set; }
         public int defaultCacheTime { get; set; } = -1;
         public DnnModuleControl[] moduleControls { get; set; }
+        public DnnModulePermission[] permissions { get; set; }
     }
 
     public class DnnModuleControl
     {
         public string controlKey { get; set; }
+        public string controlTitle { get; set; }
         public string controlSrc { get; set; }
         public string supportsPartialRendering { get; set; }
         public string controlType { get; set; }
         public string iconFile { get; set; }
         public string helpUrl { get; set; }
         public int viewOrder { get; set; } = 0;
+    }
+
+    public class DnnModulePermission
+    {
+        public string code { get; set; }
+        public string key { get; set; }
+        public string name { get; set; }
     }
 
     public class ProjectPathsAndFiles
