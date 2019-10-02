@@ -8,10 +8,17 @@ namespace Dnn.CakeUtils.Manifest
         public static Dictionary<string, System.Version> GetReferences(string assembly)
         {
             var res = new Dictionary<string, System.Version>();
-            var ass = Assembly.LoadFrom(assembly);
-            foreach (var an in ass.GetReferencedAssemblies())
+            try
             {
-                res.Add(an.Name, an.Version);
+                var ass = Assembly.LoadFrom(assembly);
+                foreach (var an in ass.GetReferencedAssemblies())
+                {
+                    res.Add(an.Name, an.Version);
+                }
+            }
+            catch (System.Exception)
+            {
+                // ignore
             }
             return res;
         }
