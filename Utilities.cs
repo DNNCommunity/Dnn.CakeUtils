@@ -121,5 +121,17 @@ namespace Dnn.CakeUtils
             }
             return output;
         }
+
+        public static void CreateResourcesFile(ICakeContext context, string path, string packagePath, string packageName, string[] releaseFiles, string[] excludeFiles)
+        {
+            var files = GetFilesByPatterns(context, path, releaseFiles, ExcludeFunction(excludeFiles));
+            if (files.Count > 0)
+            {
+                var resZip = Compression.ZipToBytes(path, files);
+                Console.WriteLine("Zipped resources file");
+                Compression.AddBinaryFileToZip(packagePath, resZip, packageName + ".zip", true);
+            }
+            Console.WriteLine("Added resources from " + path);
+        }
     }
 }

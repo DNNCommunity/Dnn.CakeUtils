@@ -20,14 +20,13 @@ namespace Dnn.CakeUtils.Manifest
             PackagesNode = rootNode.AddChildElement("packages");
             foreach (var pFolder in sln.dnn.projectFolders)
             {
-                AddPackage(pFolder);
+                AddPackage(Solution.dnn.projects[pFolder]);
             }
             Console.WriteLine("Finished Creating Manifest");
         }
 
-        private void AddPackage(string projectFolder)
+        private void AddPackage(Project project)
         {
-            var project = Solution.dnn.projects[projectFolder];
             var package = PackagesNode.AddChildElement("package");
             package.AddAttribute("name", project.packageName);
             // Set core attributes
@@ -86,7 +85,14 @@ namespace Dnn.CakeUtils.Manifest
                     package.AppendChild(components);
                     break;
                 case ProjectType.skin:
-                    // todo
+                    package.AddAttribute("type", "Skin");
+                    components.AddSkinComponent(project);
+                    package.AppendChild(components);
+                    break;
+                case ProjectType.container:
+                    package.AddAttribute("type", "Container");
+                    components.AddContainerComponent(project);
+                    package.AppendChild(components);
                     break;
             }
 

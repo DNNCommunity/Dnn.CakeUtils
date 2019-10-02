@@ -146,5 +146,25 @@ namespace Dnn.CakeUtils.Manifest
             rf.AddChildElement("basePath", "DesktopModules/" + project.folder);
             rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName + ".zip");
         }
+
+        public static void AddSkinComponent(this XmlNode parent, Project project)
+        {
+            var rf = parent.AddChildElement("component").AddAttribute("type", "Skin").AddChildElement("skinFiles");
+            rf.AddChildElement("skinName", project.name);
+            rf.AddChildElement("basePath", "Portals/_default/Skins/" + project.name);
+            rf = parent.AddChildElement("component").AddAttribute("type", "ResourceFile").AddChildElement("resourceFiles");
+            rf.AddChildElement("basePath", "Portals/_default/Skins/" + project.name);
+            rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName + ".zip");
+        }
+
+        public static void AddContainerComponent(this XmlNode parent, Project project)
+        {
+            var rf = parent.AddChildElement("component").AddAttribute("type", "Container").AddChildElement("containerFiles");
+            rf.AddChildElement("containerName", project.name);
+            rf.AddChildElement("basePath", "Portals/_default/Containers/" + project.name);
+            rf = parent.AddChildElement("component").AddAttribute("type", "ResourceFile").AddChildElement("resourceFiles");
+            rf.AddChildElement("basePath", "Portals/_default/Containers/" + project.name);
+            rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName + ".zip");
+        }
     }
 }
