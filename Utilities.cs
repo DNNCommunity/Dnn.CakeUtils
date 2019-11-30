@@ -17,6 +17,18 @@ namespace Dnn.CakeUtils
             ai.Write();
         }
 
+        public static void UpdateAssemblyInfoVersion(Version version, string informationalVersion, string filePath)
+        {
+            var ai = new AssemblyInfo(filePath);
+            ai.SetProperty("AssemblyVersion", version.ToString(3));
+            ai.SetProperty("AssemblyFileVersion", version.ToString(4));
+            if (!string.IsNullOrEmpty(informationalVersion))
+            {
+                ai.SetProperty("AssemblyInformationalVersion", informationalVersion);
+            }
+            ai.Write();
+        }
+
         public static string GetTextOrMdFile(string filePathWithoutExtension)
         {
             if (System.IO.File.Exists(filePathWithoutExtension + ".md"))
