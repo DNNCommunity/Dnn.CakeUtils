@@ -71,6 +71,7 @@ namespace Dnn.CakeUtils.Manifest
                     package.AddAttribute("type", "Module");
                     package.SetChildElement("azureCompatible", project.module.azureCompatible);
                     components.AppendChild(project.module.ToXml(components));
+                    if (project.config != null) components.AppendChild(project.config.ToXml(components));
                     components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
                     components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
                     components.AddCleanupFiles(project);
@@ -79,6 +80,7 @@ namespace Dnn.CakeUtils.Manifest
                     break;
                 case ProjectType.library:
                     package.AddAttribute("type", "Library");
+                    if (project.config != null) components.AppendChild(project.config.ToXml(components));
                     components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
                     components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
                     components.AddCleanupFiles(project);
@@ -95,7 +97,6 @@ namespace Dnn.CakeUtils.Manifest
                     package.AppendChild(components);
                     break;
             }
-
         }
     }
 }

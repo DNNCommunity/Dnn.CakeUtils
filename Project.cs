@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
 
 namespace Dnn.CakeUtils
 {
@@ -15,6 +16,7 @@ namespace Dnn.CakeUtils
         public string folder { get; set; }
         public string iconFile { get; set; }
         public DnnModule module { get; set; }
+        public DnnConfig config { get; set; }
         public ProjectPathsAndFiles pathsAndFiles { get; set; }
     }
 
@@ -26,6 +28,7 @@ namespace Dnn.CakeUtils
         public string businessControllerClass { get; set; }
         public string[] supportedFeatures { get; set; }
         public DnnModuleDefinition[] moduleDefinitions { get; set; }
+        public DnnEventMessage eventMessage { get; set; }
     }
 
     public class DnnModuleDefinition
@@ -54,6 +57,20 @@ namespace Dnn.CakeUtils
         public string code { get; set; }
         public string key { get; set; }
         public string name { get; set; }
+    }
+
+    public class DnnEventMessage
+    {
+        public string processorType { get; set; }
+        public string processorCommand { get; set; }
+        public Dictionary<string, string> attributes { get; set; }
+    }
+
+    public class DnnConfig
+    {
+        public string configFile { get; set; }
+        public string install { get; set; }
+        public string uninstall { get; set; }
     }
 
     public class ProjectPathsAndFiles
