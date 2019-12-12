@@ -116,12 +116,13 @@ namespace Dnn.CakeUtils.Manifest
             }
         }
 
-        public static void AddCleanupFiles(this XmlNode parent, Project project)
+        public static void AddCleanupFiles(this XmlNode parent, Project project, string packageCleanupFolder)
         {
             if (string.IsNullOrEmpty(project.pathsAndFiles.pathToCleanupFiles))
             {
                 return;
             }
+            var folderName = packageCleanupFolder.EnsureEndsWith("/");
             var d = new System.IO.DirectoryInfo(project.pathsAndFiles.pathToCleanupFiles);
             if (!d.Exists)
             {
@@ -135,7 +136,7 @@ namespace Dnn.CakeUtils.Manifest
                     parent.AddChildElement("component")
                         .AddAttribute("type", "CleanUp")
                         .AddAttribute("version", System.IO.Path.GetFileNameWithoutExtension(f.Name))
-                        .AddAttribute("fileName", f.Name);
+                        .AddAttribute("fileName", folderName + f.Name);
                 }
             }
         }

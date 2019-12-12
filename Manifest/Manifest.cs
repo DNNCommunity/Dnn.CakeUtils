@@ -74,7 +74,7 @@ namespace Dnn.CakeUtils.Manifest
                     if (project.config != null) components.AppendChild(project.config.ToXml(components));
                     components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
                     components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
-                    components.AddCleanupFiles(project);
+                    components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder + "/" + project.packageName);
                     components.AddResourceComponent(project);
                     package.AppendChild(components);
                     break;
@@ -83,7 +83,7 @@ namespace Dnn.CakeUtils.Manifest
                     if (project.config != null) components.AppendChild(project.config.ToXml(components));
                     components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
                     components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
-                    components.AddCleanupFiles(project);
+                    components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder + "/" + project.packageName);
                     package.AppendChild(components);
                     break;
                 case ProjectType.skin:

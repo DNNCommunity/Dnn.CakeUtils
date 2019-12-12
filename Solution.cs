@@ -44,6 +44,7 @@ namespace Dnn.CakeUtils
         public string zipName { get; set; }
         public string packageAssembliesFolder { get; set; } = "bin";
         public string packageScriptsFolder { get; set; } = "scripts";
+        public string packageCleanupFolder { get; set; } = "cleanup";
     }
 
     public class Owner
