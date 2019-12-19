@@ -122,8 +122,8 @@ namespace Dnn.CakeUtils.Manifest
             {
                 return;
             }
-            var folderName = packageCleanupFolder.EnsureEndsWith("/");
-            folderName += project.packageName.NoSlashes() + "/";
+            var folderName = packageCleanupFolder.EnsureEndsWith("\\");
+            folderName += project.packageName.NoSlashes() + "\\";
             var d = new System.IO.DirectoryInfo(project.pathsAndFiles.pathToCleanupFiles);
             if (!d.Exists)
             {
@@ -135,7 +135,7 @@ namespace Dnn.CakeUtils.Manifest
                 if (m.Success)
                 {
                     parent.AddChildElement("component")
-                        .AddAttribute("type", "CleanUp")
+                        .AddAttribute("type", "Cleanup")
                         .AddAttribute("version", System.IO.Path.GetFileNameWithoutExtension(f.Name))
                         .AddAttribute("fileName", folderName + f.Name);
                 }
