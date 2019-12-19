@@ -16,7 +16,7 @@ namespace Dnn.CakeUtils.Manifest
                 return;
             }
             var folderName = packageScriptsFolder.EnsureEndsWith("/");
-            folderName += project.packageName + "/";
+            folderName += project.packageName.NoSlashes() + "/";
             var scriptsFound = false;
             var newNode = parent.AddChildElement("component").AddAttribute("type", "Script");
             var scripts = newNode.AddChildElement("scripts");
@@ -118,11 +118,12 @@ namespace Dnn.CakeUtils.Manifest
 
         public static void AddCleanupFiles(this XmlNode parent, Project project, string packageCleanupFolder)
         {
-            if (string.IsNullOrEmpty(project.pathsAndFiles.pathToCleanupFiles))
+            if (string.IsNullOrEmpty(project.pathsAndFiles.pathToScripts))
             {
                 return;
             }
             var folderName = packageCleanupFolder.EnsureEndsWith("/");
+            folderName += project.packageName.NoSlashes() + "/";
             var d = new System.IO.DirectoryInfo(project.pathsAndFiles.pathToCleanupFiles);
             if (!d.Exists)
             {
@@ -145,7 +146,7 @@ namespace Dnn.CakeUtils.Manifest
         {
             var rf = parent.AddChildElement("component").AddAttribute("type", "ResourceFile").AddChildElement("resourceFiles");
             rf.AddChildElement("basePath", "DesktopModules/" + project.folder);
-            rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName + ".zip");
+            rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName.NoSlashes() + ".zip");
         }
 
         public static void AddSkinComponent(this XmlNode parent, Project project)
@@ -155,7 +156,7 @@ namespace Dnn.CakeUtils.Manifest
             rf.AddChildElement("basePath", "Portals/_default/Skins/" + project.name);
             rf = parent.AddChildElement("component").AddAttribute("type", "ResourceFile").AddChildElement("resourceFiles");
             rf.AddChildElement("basePath", "Portals/_default/Skins/" + project.name);
-            rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName + ".zip");
+            rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName.NoSlashes() + ".zip");
         }
 
         public static void AddContainerComponent(this XmlNode parent, Project project)
@@ -165,7 +166,7 @@ namespace Dnn.CakeUtils.Manifest
             rf.AddChildElement("basePath", "Portals/_default/Containers/" + project.name);
             rf = parent.AddChildElement("component").AddAttribute("type", "ResourceFile").AddChildElement("resourceFiles");
             rf.AddChildElement("basePath", "Portals/_default/Containers/" + project.name);
-            rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName + ".zip");
+            rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName.NoSlashes() + ".zip");
         }
     }
 }

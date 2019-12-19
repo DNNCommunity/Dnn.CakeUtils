@@ -1,5 +1,6 @@
 ﻿using Cake.Core;
 using System;
+using System.IO;
 
 namespace Dnn.CakeUtils
 {
@@ -29,15 +30,19 @@ namespace Dnn.CakeUtils
             ai.Write();
         }
 
-        public static string GetTextOrMdFile(string filePathWithoutExtension)
+        public static string GetTextOrMdFile(string filePathWithExtension)
         {
-            if (System.IO.File.Exists(filePathWithoutExtension + ".md"))
+            var filePath = Path.Combine(Path.GetDirectoryName(filePathWithExtension), Path.GetFileNameWithoutExtension(filePathWithExtension));
+            Console.WriteLine("GetTextOrMdFile {0}", filePath);
+            if (File.Exists(filePath + ".md"))
             {
-                return Markdown.ToHtml(filePathWithoutExtension + ".md");
+                Console.WriteLine("MD Found");
+                return Markdown.ToHtml(filePath + ".md");
             }
-            if (System.IO.File.Exists(filePathWithoutExtension + ".txt"))
+            if (File.Exists(filePath + ".txt"))
             {
-                return ReadFile(filePathWithoutExtension + ".txt");
+                Console.WriteLine("TXT Found");
+                return ReadFile(filePath + ".txt");
             }
             return "";
         }

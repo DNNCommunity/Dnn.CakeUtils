@@ -77,6 +77,8 @@ namespace Dnn.CakeUtils
     {
         public string pathToScripts { get; set; } = "";
         public string pathToCleanupFiles { get; set; } = "";
+        public string licenseFile { get; set; } = "";
+        public string releaseNotesFile { get; set; } = "";
         public string[] assemblies { get; set; }
         public string[] excludeFilter { get; set; }
         public string[] releaseFiles { get; set; }

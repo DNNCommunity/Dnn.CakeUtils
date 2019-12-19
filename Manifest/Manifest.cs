@@ -32,7 +32,7 @@ namespace Dnn.CakeUtils.Manifest
             // Set core attributes
             package.SetAttribute("version", Solution.version);
             package.SetChildElement("friendlyName", project.friendlyName);
-            package.SetChildElement("description", project.description.Otherwise(Solution.version));
+            package.SetChildElement("description", project.description.Otherwise(Solution.description));
             package.SetChildElement("iconFile", project.iconFile);
             // Add owner
             var owner = package.SetChildElement("owner");
@@ -54,11 +54,19 @@ namespace Dnn.CakeUtils.Manifest
                     coredep.InnerText = coreRef;
                 }
             }
-            if (!string.IsNullOrEmpty(Solution.dnn.pathsAndFiles.licenseFile.Otherwise(Solution.dnn.pathsAndFiles.licenseFile)))
+            if (!string.IsNullOrEmpty(project.pathsAndFiles.licenseFile))
+            {
+                package.SetChildElement("license").SetAttribute("src", project.packageName.NoSlashes() + "/License.txt");
+            }
+            else if (!string.IsNullOrEmpty(Solution.dnn.pathsAndFiles.licenseFile))
             {
                 package.SetChildElement("license").SetAttribute("src", "License.txt");
             }
-            if (!string.IsNullOrEmpty(Solution.dnn.pathsAndFiles.releaseNotesFile.Otherwise(Solution.dnn.pathsAndFiles.releaseNotesFile)))
+            if (!string.IsNullOrEmpty(project.pathsAndFiles.releaseNotesFile))
+            {
+                package.SetChildElement("releaseNotes").SetAttribute("src", project.packageName.NoSlashes() + "/ReleaseNotes.txt");
+            }
+            else if (!string.IsNullOrEmpty(Solution.dnn.pathsAndFiles.releaseNotesFile))
             {
                 package.SetChildElement("releaseNotes").SetAttribute("src", "ReleaseNotes.txt");
             }
@@ -71,19 +79,27 @@ namespace Dnn.CakeUtils.Manifest
                     package.AddAttribute("type", "Module");
                     package.SetChildElement("azureCompatible", project.module.azureCompatible);
                     components.AppendChild(project.module.ToXml(components));
-                    if (project.config != null) components.AppendChild(project.config.ToXml(components));
+                    if (project.config != null)
+                    {
+                        components.AppendChild(project.config.ToXml(components));
+                    }
+
                     components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
                     components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
-                    components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder + "/" + project.packageName);
+                    components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder);
                     components.AddResourceComponent(project);
                     package.AppendChild(components);
                     break;
                 case ProjectType.library:
                     package.AddAttribute("type", "Library");
-                    if (project.config != null) components.AppendChild(project.config.ToXml(components));
+                    if (project.config != null)
+                    {
+                        components.AppendChild(project.config.ToXml(components));
+                    }
+
                     components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
                     components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
-                    components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder + "/" + project.packageName);
+                    components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder);
                     package.AppendChild(components);
                     break;
                 case ProjectType.skin:

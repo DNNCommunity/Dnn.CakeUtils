@@ -81,5 +81,9 @@ namespace Dnn.CakeUtils
             }
             return input;
         }
+        public static string NoSlashes(this string input)
+        {
+            return input.Replace('/', '.').Replace('\\', '.');
+        }
     }
 }
