@@ -15,6 +15,7 @@ namespace Dnn.CakeUtils
         public string packageName { get; set; }
         public string folder { get; set; }
         public string iconFile { get; set; }
+        public bool packageSeparately { get; set; } = false;
         public DnnModule module { get; set; }
         public DnnConfig config { get; set; }
         public ProjectPathsAndFiles pathsAndFiles { get; set; }
@@ -79,6 +80,7 @@ namespace Dnn.CakeUtils
         public string pathToCleanupFiles { get; set; } = "";
         public string licenseFile { get; set; } = "";
         public string releaseNotesFile { get; set; } = "";
+        public string zipName { get; set; }
         public string[] assemblies { get; set; }
         public string[] excludeFilter { get; set; }
         public string[] releaseFiles { get; set; }

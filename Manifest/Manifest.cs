@@ -20,8 +20,26 @@ namespace Dnn.CakeUtils.Manifest
             PackagesNode = rootNode.AddChildElement("packages");
             foreach (var pFolder in sln.dnn.projectFolders)
             {
-                AddPackage(Solution.dnn.projects[pFolder]);
+                var project = Solution.dnn.projects[pFolder];
+                if (!project.packageSeparately)
+                {
+                    AddPackage(project);
+                }
             }
+            Console.WriteLine("Finished Creating Manifest");
+        }
+
+        public Manifest(Solution sln, Project project) : base()
+        {
+            Console.WriteLine("Creating Manifest");
+            Solution = sln;
+            // Set up document
+            var rootNode = CreateElement("dotnetnuke");
+            AppendChild(rootNode);
+            rootNode.AddAttribute("type", "Package");
+            rootNode.AddAttribute("version", "5.0");
+            PackagesNode = rootNode.AddChildElement("packages");
+            AddPackage(project);
             Console.WriteLine("Finished Creating Manifest");
         }
 
@@ -58,7 +76,7 @@ namespace Dnn.CakeUtils.Manifest
             {
                 package.SetChildElement("license").SetAttribute("src", project.packageName.NoSlashes() + "/License.txt");
             }
-            else if (!string.IsNullOrEmpty(Solution.dnn.pathsAndFiles.licenseFile))
+            else if (!string.IsNullOrEmpty(Solution.dnn.pathsAndFiles.licenseFile) && !project.packageSeparately)
             {
                 package.SetChildElement("license").SetAttribute("src", "License.txt");
             }
@@ -66,7 +84,7 @@ namespace Dnn.CakeUtils.Manifest
             {
                 package.SetChildElement("releaseNotes").SetAttribute("src", project.packageName.NoSlashes() + "/ReleaseNotes.txt");
             }
-            else if (!string.IsNullOrEmpty(Solution.dnn.pathsAndFiles.releaseNotesFile))
+            else if (!string.IsNullOrEmpty(Solution.dnn.pathsAndFiles.releaseNotesFile) && !project.packageSeparately)
             {
                 package.SetChildElement("releaseNotes").SetAttribute("src", "ReleaseNotes.txt");
             }
