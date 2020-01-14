@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -65,6 +66,18 @@ namespace Dnn.CakeUtils
                     }
                 }
             }
+        }
+        public Version GetVersion()
+        {
+            if (StringProperties.ContainsKey("AssemblyFileVersion"))
+            {
+                return new Version(StringProperties["AssemblyFileVersion"]);
+            }
+            if (StringProperties.ContainsKey("AssemblyVersion"))
+            {
+                return new Version(StringProperties["AssemblyVersion"]);
+            }
+            return new Version(0, 0, 0, 0);
         }
     }
 }
