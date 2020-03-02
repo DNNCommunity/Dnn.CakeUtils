@@ -118,7 +118,7 @@ namespace Dnn.CakeUtils.Manifest
 
         public static void AddCleanupFiles(this XmlNode parent, Project project, string packageCleanupFolder)
         {
-            if (string.IsNullOrEmpty(project.pathsAndFiles.pathToScripts))
+            if (string.IsNullOrEmpty(project.pathsAndFiles.pathToCleanupFiles))
             {
                 return;
             }
