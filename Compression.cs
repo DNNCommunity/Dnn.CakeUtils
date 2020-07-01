@@ -123,15 +123,21 @@ namespace Dnn.CakeUtils
         {
             var root = new DirectoryInfo(start);
             var rootPath = root.FullName;
-            var res = new MemoryStream();
-            var outStream = new ZipArchive(res, ZipArchiveMode.Create, true);
-            foreach (var file in files)
+            var outStream = new MemoryStream();
+            using (var archive = new ZipArchive(outStream, ZipArchiveMode.Create, true))
             {
-                Console.WriteLine("Zipping " + file.FullPath);
-                outStream.CreateEntryFromFile(file.FullPath, file.FullPath.Substring(rootPath.Length + 1));
+                foreach (var file in files)
+                {
+                    Console.WriteLine("Zipping " + file.FullPath);
+                    var fileInArchive = archive.CreateEntry(file.FullPath.Substring(rootPath.Length + 1), CompressionLevel.Optimal);
+                    using (var entryStream = fileInArchive.Open())
+                    using (var fileToCompressStream = new FileStream(file.FullPath, FileMode.Open, FileAccess.Read))
+                    {
+                        fileToCompressStream.CopyTo(entryStream);
+                    }
+                }
             }
-            res.Seek(0, SeekOrigin.Begin);
-            return res;
+            return outStream;
         }
 
         public static byte[] ZipToBytes(string start, IEnumerable<FilePath> files)
