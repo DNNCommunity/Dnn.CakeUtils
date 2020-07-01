@@ -91,6 +91,7 @@ namespace Dnn.CakeUtils
         module,
         skin,
         container,
-        library
+        library,
+        provider
     }
 }

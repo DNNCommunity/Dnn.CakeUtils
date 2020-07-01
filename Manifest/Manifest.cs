@@ -130,6 +130,18 @@ namespace Dnn.CakeUtils.Manifest
                     components.AddContainerComponent(project);
                     package.AppendChild(components);
                     break;
+                case ProjectType.provider:
+                    package.AddAttribute("type", "Provider");
+                    if (project.config != null)
+                    {
+                        components.AppendChild(project.config.ToXml(components));
+                    }
+
+                    components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
+                    components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
+                    components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder);
+                    package.AppendChild(components);
+                    break;
             }
         }
     }
