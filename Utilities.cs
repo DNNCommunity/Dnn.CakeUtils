@@ -30,6 +30,18 @@ namespace Dnn.CakeUtils
             ai.Write();
         }
 
+        public static void UpdateCsProjFile(Solution sln, string filePath)
+        {
+            var projFile = new CsProjFile(filePath);
+            projFile.SetProperty("AssemblyVersion", sln.version);
+            projFile.SetProperty("FileVersion", sln.version);
+            projFile.SetProperty("Product", sln.name);
+            projFile.SetProperty("Description", sln.description);
+            projFile.SetProperty("Company", sln.dnn.owner.organization);
+            projFile.SetProperty("Copyright", string.Format("Copyright {0} by {1}", System.DateTime.Now.Year, sln.dnn.owner.organization));
+            projFile.Write();
+        }
+
         public static string GetTextOrMdFile(string filePathWithExtension)
         {
             var filePath = Path.Combine(Path.GetDirectoryName(filePathWithExtension), Path.GetFileNameWithoutExtension(filePathWithExtension));
