@@ -142,6 +142,20 @@ namespace Dnn.CakeUtils.Manifest
                     components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder);
                     package.AppendChild(components);
                     break;
+                case ProjectType.auth_system:
+                    package.AddAttribute("type", "Auth_System");
+                    components.AddAuthSystemComponent(project);
+                    if (project.config != null)
+                    {
+                        components.AppendChild(project.config.ToXml(components));
+                    }
+
+                    components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
+                    components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
+                    components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder);
+                    components.AddResourceComponent(project);
+                    package.AppendChild(components);
+                    break;
             }
         }
     }

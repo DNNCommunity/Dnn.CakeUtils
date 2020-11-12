@@ -18,6 +18,7 @@ namespace Dnn.CakeUtils
         public bool packageSeparately { get; set; } = false;
         public DnnModule module { get; set; }
         public DnnConfig config { get; set; }
+        public DnnAuthSystem authenticationSystem { get; set; }
         public ProjectPathsAndFiles pathsAndFiles { get; set; }
     }
 
@@ -86,12 +87,21 @@ namespace Dnn.CakeUtils
         public string[] releaseFiles { get; set; }
     }
 
+    public class DnnAuthSystem
+    {
+        public string type { get; set; } = "";
+        public string settingsControlSrc { get; set; } = "";
+        public string loginControlSrc { get; set; } = "";
+        public string logoffControlSrc { get; set; } = "";
+    }
+
     public enum ProjectType
     {
         module,
         skin,
         container,
         library,
-        provider
+        provider,
+        auth_system
     }
 }

@@ -168,5 +168,14 @@ namespace Dnn.CakeUtils.Manifest
             rf.AddChildElement("basePath", "Portals/_default/Containers/" + project.name);
             rf.AddChildElement("resourceFile").AddChildElement("name", project.packageName.NoSlashes() + ".zip");
         }
+
+        public static void AddAuthSystemComponent(this XmlNode parent, Project project)
+        {
+            var rf = parent.AddChildElement("component").AddAttribute("type", "AuthenticationSystem").AddChildElement("authenticationService");
+            rf.AddChildElement("type", project.authenticationSystem.type);
+            rf.AddChildElement("settingsControlSrc", project.authenticationSystem.settingsControlSrc);
+            rf.AddChildElement("loginControlSrc", project.authenticationSystem.loginControlSrc);
+            rf.AddChildElement("logoffControlSrc", project.authenticationSystem.logoffControlSrc);
+        }
     }
 }
