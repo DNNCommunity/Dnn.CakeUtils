@@ -33,6 +33,10 @@ namespace Dnn.CakeUtils
         public static void UpdateCsProjFile(Solution sln, string filePath)
         {
             var projFile = new CsProjFile(filePath);
+            if (!projFile.IsNetCore)
+            {
+                return;
+            }
             projFile.SetProperty("AssemblyVersion", sln.version);
             projFile.SetProperty("FileVersion", sln.version);
             projFile.SetProperty("Product", sln.name);
