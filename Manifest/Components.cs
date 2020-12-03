@@ -177,5 +177,18 @@ namespace Dnn.CakeUtils.Manifest
             rf.AddChildElement("loginControlSrc", project.authenticationSystem.loginControlSrc);
             rf.AddChildElement("logoffControlSrc", project.authenticationSystem.logoffControlSrc);
         }
+
+        public static void AddPersonabarComponent(this XmlNode parent, Project project)
+        {
+            var rf = parent.AddChildElement("component").AddAttribute("type", "PersonaBarMenu").AddChildElement("menu");
+            rf.AddChildElement("identifier", project.personaBarMenu.identifier);
+            rf.AddChildElement("moduleName", project.personaBarMenu.moduleName);
+            rf.AddChildElement("controller", project.personaBarMenu.controller);
+            rf.AddChildElement("resourceKey", project.personaBarMenu.resourceKey);
+            rf.AddChildElement("path", project.personaBarMenu.path);
+            rf.AddChildElement("mobileSupport", project.personaBarMenu.mobileSupport.ToString());
+            rf.AddChildElement("parent", project.personaBarMenu.parent);
+            rf.AddChildElement("order", project.personaBarMenu.order.ToString());
+        }
     }
 }

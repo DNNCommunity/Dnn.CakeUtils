@@ -19,6 +19,7 @@ namespace Dnn.CakeUtils
         public DnnModule module { get; set; }
         public DnnConfig config { get; set; }
         public DnnAuthSystem authenticationSystem { get; set; }
+        public PersonaBarMenu personaBarMenu { get; set; }
         public ProjectPathsAndFiles pathsAndFiles { get; set; }
     }
 
@@ -95,6 +96,18 @@ namespace Dnn.CakeUtils
         public string logoffControlSrc { get; set; } = "";
     }
 
+    public class PersonaBarMenu
+    {
+        public string identifier { get; set; } = "";
+        public string moduleName { get; set; } = "";
+        public string controller { get; set; } = "";
+        public string resourceKey { get; set; } = "";
+        public string path { get; set; } = "";
+        public bool mobileSupport { get; set; } = true;
+        public string parent { get; set; } = "";
+        public int order { get; set; } = 0;
+    }
+
     public enum ProjectType
     {
         module,
@@ -102,6 +115,7 @@ namespace Dnn.CakeUtils
         container,
         library,
         provider,
-        auth_system
+        auth_system,
+        personabar
     }
 }

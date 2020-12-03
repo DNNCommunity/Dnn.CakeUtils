@@ -156,6 +156,20 @@ namespace Dnn.CakeUtils.Manifest
                     components.AddResourceComponent(project);
                     package.AppendChild(components);
                     break;
+                case ProjectType.personabar:
+                    package.AddAttribute("type", "PersonaBar");
+                    components.AddPersonabarComponent(project);
+                    if (project.config != null)
+                    {
+                        components.AppendChild(project.config.ToXml(components));
+                    }
+
+                    components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
+                    components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
+                    components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder);
+                    components.AddResourceComponent(project);
+                    package.AppendChild(components);
+                    break;
             }
         }
     }
