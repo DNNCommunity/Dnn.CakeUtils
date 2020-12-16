@@ -53,18 +53,25 @@ namespace Dnn.CakeUtils.Manifest
                     }
                     else
                     {
-                        m = Regex.Match(f.Name, @"(?i)(\w+)\.SqlDataProvider(?-i)");
+                        m = Regex.Match(f.Name, @"(?i)(.+)\.SqlDataProvider(?-i)");
                         if (m.Success)
                         {
-                            switch (m.Groups[1].Value.ToLower())
+                            var scriptName = m.Groups[1].Value.ToLower();
+                            if (scriptName == "uninstall")
                             {
-                                case "uninstall":
-                                    var script = scripts.AddChildElement("script").AddAttribute("type", "UnInstall");
-                                    script.AddChildElement("name", f.Name);
-                                    script.AddChildElement("sourceFileName", folderName + f.Name);
-                                    script.AddChildElement("version", version.ToNormalizedVersion());
-                                    scriptsFound = true;
-                                    break;
+                                var script = scripts.AddChildElement("script").AddAttribute("type", "UnInstall");
+                                script.AddChildElement("name", f.Name);
+                                script.AddChildElement("sourceFileName", folderName + f.Name);
+                                script.AddChildElement("version", version.ToNormalizedVersion());
+                                scriptsFound = true;
+                            }
+                            else if (scriptName.StartsWith("upgrade") || scriptName.StartsWith("schema"))
+                            {
+                                var script = scripts.AddChildElement("script").AddAttribute("type", "Install");
+                                script.AddChildElement("name", f.Name);
+                                script.AddChildElement("sourceFileName", folderName + f.Name);
+                                script.AddChildElement("version", version.ToNormalizedVersion());
+                                scriptsFound = true;
                             }
                         }
                     }
