@@ -27,9 +27,9 @@ namespace Dnn.CakeUtils
                 var files = context.GetFilesByPatterns(devPath, releaseFiles, excludeFiles);
                 if (files.Count > 0)
                 {
-                    var resZip = Compression.ZipToBytes(devPath, files);
+                    var resZip = context.ZipToBytes(devPath, files);
                     context.Information("Zipped resources file");
-                    Compression.AddBinaryFileToZip(packagePath, resZip, project.packageName.NoSlashes() + ".zip", true);
+                    context.AddBinaryFileToZip(packagePath, resZip, project.packageName.NoSlashes() + ".zip", true);
                 }
                 context.Information("Added resources from " + devPath);
             }
@@ -40,7 +40,7 @@ namespace Dnn.CakeUtils
             if (!string.IsNullOrEmpty(project.pathsAndFiles.pathToScripts))
             {
                 var files = context.GetFiles(project.pathsAndFiles.pathToScripts + "/*.SqlDataProvider");
-                Compression.AddFilesToZip(packagePath, project.pathsAndFiles.pathToScripts, solution.dnn.pathsAndFiles.packageScriptsFolder + "/" + project.packageName.NoSlashes(), files, true);
+                context.AddFilesToZip(packagePath, project.pathsAndFiles.pathToScripts, solution.dnn.pathsAndFiles.packageScriptsFolder + "/" + project.packageName.NoSlashes(), files, true);
             }
         }
         [CakeMethodAlias]
@@ -49,7 +49,7 @@ namespace Dnn.CakeUtils
             if (!string.IsNullOrEmpty(project.pathsAndFiles.pathToCleanupFiles))
             {
                 var files = context.GetFiles(project.pathsAndFiles.pathToCleanupFiles + "/*.txt");
-                Compression.AddFilesToZip(packagePath, project.pathsAndFiles.pathToCleanupFiles, solution.dnn.pathsAndFiles.packageCleanupFolder + "/" + project.packageName.NoSlashes(), files, true);
+                context.AddFilesToZip(packagePath, project.pathsAndFiles.pathToCleanupFiles, solution.dnn.pathsAndFiles.packageCleanupFolder + "/" + project.packageName.NoSlashes(), files, true);
             }
         }
         [CakeMethodAlias]
@@ -57,18 +57,18 @@ namespace Dnn.CakeUtils
         {
             if (!string.IsNullOrEmpty(project.pathsAndFiles.licenseFile))
             {
-                var license = Utilities.GetTextOrMdFile(project.pathsAndFiles.licenseFile);
+                var license = context.GetTextOrMdFile(project.pathsAndFiles.licenseFile);
                 if (license != "")
                 {
-                    Compression.AddTextFileToZip(packagePath, license, project.packageName.NoSlashes() + "/License.txt", true);
+                    context.AddTextFileToZip(packagePath, license, project.packageName.NoSlashes() + "/License.txt", true);
                 }
             }
             if (!string.IsNullOrEmpty(project.pathsAndFiles.releaseNotesFile))
             {
-                var releaseNotes = Utilities.GetTextOrMdFile(project.pathsAndFiles.releaseNotesFile);
+                var releaseNotes = context.GetTextOrMdFile(project.pathsAndFiles.releaseNotesFile);
                 if (releaseNotes != "")
                 {
-                    Compression.AddTextFileToZip(packagePath, releaseNotes, project.packageName.NoSlashes() + "/ReleaseNotes.txt", true);
+                    context.AddTextFileToZip(packagePath, releaseNotes, project.packageName.NoSlashes() + "/ReleaseNotes.txt", true);
                 }
             }
         }

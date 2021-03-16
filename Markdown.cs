@@ -1,14 +1,15 @@
 ﻿using System.IO;
 
+using Cake.Core;
 using Cake.Core.IO;
 
 using Markdig;
 
 namespace Dnn.CakeUtils
 {
-    public class Markdown
+    public static class Markdown
     {
-        public static string ToHtml(FilePath fileName)
+        public static string ToHtml(this ICakeContext context, FilePath fileName)
         {
             if (File.Exists(fileName.FullPath))
             {

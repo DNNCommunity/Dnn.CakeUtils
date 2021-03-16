@@ -1,14 +1,15 @@
 ﻿using System;
 using System.IO;
 
+using Cake.Common.Diagnostics;
 using Cake.Core;
 using Cake.Core.IO;
 
 namespace Dnn.CakeUtils
 {
-    public class Utilities
+    public static class Utilities
     {
-        public static void UpdateAssemblyInfo(Solution sln, FilePath filePath)
+        public static void UpdateAssemblyInfo(this ICakeContext context, Solution sln, FilePath filePath)
         {
             var ai = new AssemblyInfo(filePath);
             ai.SetProperty("AssemblyVersion", sln.version);
@@ -20,7 +21,7 @@ namespace Dnn.CakeUtils
             ai.Write();
         }
 
-        public static void UpdateAssemblyInfoVersion(Version version, string informationalVersion, FilePath filePath)
+        public static void UpdateAssemblyInfoVersion(this ICakeContext context, Version version, string informationalVersion, FilePath filePath)
         {
             var ai = new AssemblyInfo(filePath);
             ai.SetProperty("AssemblyVersion", version.ToString(3));
@@ -32,7 +33,7 @@ namespace Dnn.CakeUtils
             ai.Write();
         }
 
-        public static void UpdateCsProjFile(Solution sln, FilePath filePath)
+        public static void UpdateCsProjFile(this ICakeContext context, Solution sln, FilePath filePath)
         {
             var projFile = new CsProjFile(filePath);
             if (!projFile.IsNetCore)
@@ -48,21 +49,26 @@ namespace Dnn.CakeUtils
             projFile.Write();
         }
 
-        public static string GetTextOrMdFile(FilePath filePathWithExtension)
+        public static string GetTextOrMdFile(this ICakeContext context, FilePath filePathWithExtension)
         {
             var filePath = filePathWithExtension.GetDirectory().CombineWithFilePath(filePathWithExtension.GetFilenameWithoutExtension());
-            Console.WriteLine("GetTextOrMdFile {0}", filePath);
+            context.Information("GetTextOrMdFile {0}", filePath);
             if (File.Exists(filePath + ".md"))
             {
-                Console.WriteLine("MD Found");
-                return Markdown.ToHtml(filePath + ".md");
+                context.Information("MD Found");
+                return context.ToHtml(filePath + ".md");
             }
             if (File.Exists(filePath + ".txt"))
             {
-                Console.WriteLine("TXT Found");
-                return ReadFile(filePath + ".txt");
+                context.Information("TXT Found");
+                return context.ReadFile(filePath + ".txt");
             }
             return "";
+        }
+
+        public static string ReadFile(this ICakeContext context, FilePath filePath)
+        {
+            return ReadFile(filePath);
         }
 
         public static string ReadFile(FilePath filePath)
@@ -73,16 +79,16 @@ namespace Dnn.CakeUtils
             }
         }
 
-        public static void CreateResourcesFile(ICakeContext context, FilePath path, FilePath packagePath, FilePath packageName, string[] releaseFiles, string[] excludeFiles)
+        public static void CreateResourcesFile(this ICakeContext context, DirectoryPath path, FilePath packagePath, FilePath packageName, string[] releaseFiles, string[] excludeFiles)
         {
             var files = context.GetFilesByPatterns(path, releaseFiles, excludeFiles);
             if (files.Count > 0)
             {
-                var resZip = Compression.ZipToBytes(path, files);
-                Console.WriteLine("Zipped resources file");
-                Compression.AddBinaryFileToZip(packagePath, resZip, packageName + ".zip", true);
+                var resZip = context.ZipToBytes(path, files);
+                context.Information("Zipped resources file");
+                context.AddBinaryFileToZip(packagePath, resZip, packageName + ".zip", true);
             }
-            Console.WriteLine("Added resources from " + path);
+            context.Information("Added resources from " + path);
         }
     }
 }
