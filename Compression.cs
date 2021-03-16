@@ -1,30 +1,30 @@
-﻿using Cake.Core.IO;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.IO.Compression;
 using System.Xml;
+
+using Cake.Core.IO;
 
 namespace Dnn.CakeUtils
 {
     public static class Compression
     {
-        public static void AddBinaryFileToZip(string zipFile, byte[] content, string name)
+        public static void AddBinaryFileToZip(FilePath zipFile, byte[] content, FilePath name)
         {
             AddBinaryFileToZip(zipFile, content, name, false);
         }
-        public static void AddBinaryFileToZip(string zipFile, byte[] content, string name, bool append)
+        public static void AddBinaryFileToZip(FilePath zipFile, byte[] content, FilePath name, bool append)
         {
             using (var sr = new MemoryStream(content))
             {
                 AddStreamToZip(zipFile, sr, name, append);
             }
         }
-        public static void AddXmlFileToZip(string zipFile, XmlDocument content, string name)
+        public static void AddXmlFileToZip(FilePath zipFile, XmlDocument content, FilePath name)
         {
             AddXmlFileToZip(zipFile, content, name, false);
         }
-        public static void AddXmlFileToZip(string zipFile, XmlDocument content, string name, bool append)
+        public static void AddXmlFileToZip(FilePath zipFile, XmlDocument content, FilePath name, bool append)
         {
             using (var ms = new MemoryStream())
             {
@@ -37,92 +37,85 @@ namespace Dnn.CakeUtils
                 AddStreamToZip(zipFile, ms, name, append);
             }
         }
-        public static void AddTextFileToZip(string zipFile, string content, string name)
+        public static void AddTextFileToZip(FilePath zipFile, string content, FilePath name)
         {
             AddTextFileToZip(zipFile, content, name, false);
         }
-        public static void AddTextFileToZip(string zipFile, string content, string name, bool append)
+        public static void AddTextFileToZip(FilePath zipFile, string content, FilePath name, bool append)
         {
             using (var sr = GenerateStreamFromString(content))
             {
                 AddStreamToZip(zipFile, sr, name, append);
             }
         }
-        public static void AddFilesToZip(string zipFile, FilePathCollection files)
+        public static void AddFilesToZip(FilePath zipFile, FilePathCollection files)
         {
             AddFilesToZip(zipFile, ".", "", files, false);
         }
-        public static void AddFilesToZip(string zipFile, FilePathCollection files, bool append)
+        public static void AddFilesToZip(FilePath zipFile, FilePathCollection files, bool append)
         {
             AddFilesToZip(zipFile, ".", "", files, append);
         }
-        public static void AddFilesToZip(string zipFile, string start, FilePathCollection files)
+        public static void AddFilesToZip(FilePath zipFile, DirectoryPath root, FilePathCollection files)
         {
-            AddFilesToZip(zipFile, start, "", files, false);
+            AddFilesToZip(zipFile, root, "", files, false);
         }
-        public static void AddFilesToZip(string zipFile, string start, FilePathCollection files, bool append)
+        public static void AddFilesToZip(FilePath zipFile, DirectoryPath root, FilePathCollection files, bool append)
         {
-            AddFilesToZip(zipFile, start, "", files, append);
+            AddFilesToZip(zipFile, root, "", files, append);
         }
-        public static void AddFilesToZip(string zipFile, string start, string newStart, FilePathCollection files)
+        public static void AddFilesToZip(FilePath zipFile, DirectoryPath root, DirectoryPath newRoot, FilePathCollection files)
         {
-            AddFilesToZip(zipFile, start, newStart, files, false);
+            AddFilesToZip(zipFile, root, newRoot, files, false);
         }
-        public static void AddFilesToZip(string zipFile, string start, string newStart, FilePathCollection files, bool append)
+        public static void AddFilesToZip(FilePath zipFile, DirectoryPath root, DirectoryPath newRoot, FilePathCollection files, bool append)
         {
             if (!append)
             {
-                if (File.Exists(zipFile))
+                if (File.Exists(zipFile.FullPath))
                 {
-                    File.Delete(zipFile);
+                    File.Delete(zipFile.FullPath);
                 }
             }
-            if (newStart != "")
-            {
-                newStart = newStart.EnsureEndsWith("/");
-            }
-            var root = new DirectoryInfo(start);
-            var rootPath = root.FullName;
+            
+            var rootPath = root.FullPath;
             foreach (var file in files)
             {
                 Console.WriteLine("Reading " + file.FullPath);
                 using (var fileToZip = new FileStream(file.FullPath, FileMode.Open, FileAccess.Read))
                 {
-                    var pathInZip = newStart == "" ?
-                        file.FullPath.Substring(rootPath.Length + 1) :
-                        newStart + file.FullPath.Substring(rootPath.Length + 1);
+                    var pathInZip = newRoot.CombineWithFilePath(file.FullPath.Substring(rootPath.Length + 1));
                     AddStreamToZip(zipFile, fileToZip, pathInZip, true);
                 }
             }
         }
-        public static void AddStreamToZip(string zipFile, Stream fileToZip, string name)
+        public static void AddStreamToZip(FilePath zipFile, Stream fileToZip, FilePath name)
         {
             AddStreamToZip(zipFile, fileToZip, name, false);
         }
-        public static void AddStreamToZip(string zipFile, Stream fileToZip, string name, bool append)
+        public static void AddStreamToZip(FilePath zipFile, Stream fileToZip, FilePath name, bool append)
         {
             if (!append)
             {
-                if (File.Exists(zipFile))
+                if (File.Exists(zipFile.FullPath))
                 {
-                    File.Delete(zipFile);
+                    File.Delete(zipFile.FullPath);
                 }
             }
-            using (var outFile = File.Open(zipFile, FileMode.OpenOrCreate))
+            using (var outFile = File.Open(zipFile.FullPath, FileMode.OpenOrCreate))
             {
                 using (var outStream = new ZipArchive(outFile, append ? ZipArchiveMode.Update : ZipArchiveMode.Create))
                 {
                     Console.WriteLine("Zipping " + name);
-                    var entry = outStream.CreateEntry(name);
+                    var entry = outStream.CreateEntry(name.FullPath);
                     fileToZip.CopyTo(entry.Open());
                 }
             }
         }
 
-        public static Stream ZipToStream(string start, IEnumerable<FilePath> files)
+        public static Stream ZipToStream(DirectoryPath root, FilePathCollection files)
         {
-            var root = new DirectoryInfo(start);
-            var rootPath = root.FullName;
+            var rootPath = root.FullPath;
             var outStream = new MemoryStream();
             using (var archive = new ZipArchive(outStream, ZipArchiveMode.Create, true))
             {
@@ -140,10 +133,9 @@ namespace Dnn.CakeUtils
             return outStream;
         }
 
-        public static byte[] ZipToBytes(string start, IEnumerable<FilePath> files)
+        public static byte[] ZipToBytes(DirectoryPath root, FilePathCollection files)
         {
-            var root = new DirectoryInfo(start);
-            var rootPath = root.FullName;
+            var rootPath = root.FullPath;
             byte[] compressedBytes;
 
             using (var outStream = new MemoryStream())
@@ -166,9 +158,9 @@ namespace Dnn.CakeUtils
             return compressedBytes;
         }
 
-        public static void AddFile(string sourcePath, Stream zip)
+        public static void AddFile(FilePath sourcePath, Stream zip)
         {
-            using (FileStream src = new FileStream(sourcePath, FileMode.Open, FileAccess.Read))
+            using (FileStream src = new FileStream(sourcePath.FullPath, FileMode.Open, FileAccess.Read))
             {
                 src.CopyToAsync(zip);
             }
@@ -195,21 +187,21 @@ namespace Dnn.CakeUtils
             return new MemoryStream(System.Text.Encoding.UTF8.GetBytes(value ?? ""));
         }
 
-        public static void SaveStream(Stream input, string filePath)
+        public static void SaveStream(Stream input, FilePath filePath)
         {
             if (input.CanSeek)
             {
                 input.Seek(0, SeekOrigin.Begin);
             }
-            using (var outFile = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
+            using (var outFile = new FileStream(filePath.FullPath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 input.CopyTo(outFile);
             }
         }
 
-        public static void SaveBytes(byte[] input, string filePath)
+        public static void SaveBytes(byte[] input, FilePath filePath)
         {
-            using (var outFile = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
+            using (var outFile = new FileStream(filePath.FullPath, FileMode.OpenOrCreate, FileAccess.Write))
             using (var fileToSave = new MemoryStream(input))
             {
                 fileToSave.CopyTo(outFile);

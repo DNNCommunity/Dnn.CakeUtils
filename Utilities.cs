@@ -1,12 +1,14 @@
-﻿using Cake.Core;
-using System;
+﻿using System;
 using System.IO;
+
+using Cake.Core;
+using Cake.Core.IO;
 
 namespace Dnn.CakeUtils
 {
     public class Utilities
     {
-        public static void UpdateAssemblyInfo(Solution sln, string filePath)
+        public static void UpdateAssemblyInfo(Solution sln, FilePath filePath)
         {
             var ai = new AssemblyInfo(filePath);
             ai.SetProperty("AssemblyVersion", sln.version);
@@ -14,11 +16,11 @@ namespace Dnn.CakeUtils
             ai.SetProperty("AssemblyTitle", sln.name);
             ai.SetProperty("AssemblyDescription", sln.description);
             ai.SetProperty("AssemblyCompany", sln.dnn.owner.organization);
-            ai.SetProperty("AssemblyCopyright", string.Format("Copyright {0} by {1}", System.DateTime.Now.Year, sln.dnn.owner.organization));
+            ai.SetProperty("AssemblyCopyright", $"Copyright {System.DateTime.Now.Year} by {sln.dnn.owner.organization}");
             ai.Write();
         }
 
-        public static void UpdateAssemblyInfoVersion(Version version, string informationalVersion, string filePath)
+        public static void UpdateAssemblyInfoVersion(Version version, string informationalVersion, FilePath filePath)
         {
             var ai = new AssemblyInfo(filePath);
             ai.SetProperty("AssemblyVersion", version.ToString(3));
@@ -30,7 +32,7 @@ namespace Dnn.CakeUtils
             ai.Write();
         }
 
-        public static void UpdateCsProjFile(Solution sln, string filePath)
+        public static void UpdateCsProjFile(Solution sln, FilePath filePath)
         {
             var projFile = new CsProjFile(filePath);
             if (!projFile.IsNetCore)
@@ -42,13 +44,13 @@ namespace Dnn.CakeUtils
             projFile.SetProperty("Product", sln.name);
             projFile.SetProperty("Description", sln.description);
             projFile.SetProperty("Company", sln.dnn.owner.organization);
-            projFile.SetProperty("Copyright", string.Format("Copyright {0} by {1}", System.DateTime.Now.Year, sln.dnn.owner.organization));
+            projFile.SetProperty("Copyright", $"Copyright {System.DateTime.Now.Year} by {sln.dnn.owner.organization}");
             projFile.Write();
         }
 
-        public static string GetTextOrMdFile(string filePathWithExtension)
+        public static string GetTextOrMdFile(FilePath filePathWithExtension)
         {
-            var filePath = Path.Combine(Path.GetDirectoryName(filePathWithExtension), Path.GetFileNameWithoutExtension(filePathWithExtension));
+            var filePath = filePathWithExtension.GetDirectory().CombineWithFilePath(filePathWithExtension.GetFilenameWithoutExtension());
             Console.WriteLine("GetTextOrMdFile {0}", filePath);
             if (File.Exists(filePath + ".md"))
             {
@@ -63,17 +65,15 @@ namespace Dnn.CakeUtils
             return "";
         }
 
-        public static string ReadFile(string filePath)
+        public static string ReadFile(FilePath filePath)
         {
-            var output = "";
-            using (var sr = new System.IO.StreamReader(filePath))
+            using (var sr = new System.IO.StreamReader(filePath.FullPath))
             {
-                output = sr.ReadToEnd();
+                return sr.ReadToEnd();
             }
-            return output;
         }
 
-        public static void CreateResourcesFile(ICakeContext context, string path, string packagePath, string packageName, string[] releaseFiles, string[] excludeFiles)
+        public static void CreateResourcesFile(ICakeContext context, FilePath path, FilePath packagePath, FilePath packageName, string[] releaseFiles, string[] excludeFiles)
         {
             var files = context.GetFilesByPatterns(path, releaseFiles, excludeFiles);
             if (files.Count > 0)

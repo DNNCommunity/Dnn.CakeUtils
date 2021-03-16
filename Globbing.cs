@@ -1,5 +1,4 @@
-﻿using Cake.Common.Diagnostics;
-using Cake.Common.IO;
+﻿using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.IO;
@@ -59,13 +58,12 @@ namespace Dnn.CakeUtils
         }
 
         [CakeMethodAlias]
-        public static FilePathCollection GetFilesByPatterns(this ICakeContext context, string root, string[] includePatterns)
+        public static FilePathCollection GetFilesByPatterns(this ICakeContext context, DirectoryPath root, string[] includePatterns)
         {
-            root = root.EnsureEndsWith("/");
             var res = new FilePathCollection();
             for (var i = 0; i < includePatterns.Length; i++)
             {
-                var incl = context.GetFiles(root + includePatterns[i].TrimStart('/'));
+                var incl = context.GetFiles(root.CombineWithFilePath(includePatterns[i].TrimStart('/')).ToString());
                 var crt = res.Select(ii => ii.FullPath);
                 foreach (var include in incl)
                 {
@@ -79,24 +77,23 @@ namespace Dnn.CakeUtils
         }
 
         [CakeMethodAlias]
-        public static FilePathCollection GetFilesByPatterns(this ICakeContext context, string root, string[] includePatterns, string[] excludePatterns)
+        public static FilePathCollection GetFilesByPatterns(this ICakeContext context, DirectoryPath root, string[] includePatterns, string[] excludePatterns)
         {
             if (excludePatterns.Length == 0)
             {
                 return GetFilesByPatterns(context, includePatterns);
             }
-
-            root = root.EnsureEndsWith("/");
-            FilePathCollection excludeFiles = context.GetFiles(root + excludePatterns[0].TrimStart('/'));
+            
+            var excludeFiles = context.GetFiles(root.CombineWithFilePath(excludePatterns[0].TrimStart('/')).ToString());
             for (var i = 1; i < excludePatterns.Length; i++)
             {
-                excludeFiles.Add(context.GetFiles(root + excludePatterns[i].TrimStart('/')));
+                excludeFiles.Add(context.GetFiles(root.CombineWithFilePath(excludePatterns[i].TrimStart('/')).ToString()));
             }
             var excludePaths = excludeFiles.Select(e => e.FullPath);
             var res = new FilePathCollection();
             for (var i = 0; i < includePatterns.Length; i++)
             {
-                var incl = context.GetFiles(root + includePatterns[i].TrimStart('/'));
+                var incl = context.GetFiles(root.CombineWithFilePath(includePatterns[i].TrimStart('/')).ToString());
                 var crt = res.Select(ii => ii.FullPath);
                 foreach (var include in incl)
                 {

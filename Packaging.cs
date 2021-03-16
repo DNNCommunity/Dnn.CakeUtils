@@ -2,6 +2,7 @@
 using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.Annotations;
+using Cake.Core.IO;
 using System.Linq;
 
 namespace Dnn.CakeUtils
@@ -9,7 +10,7 @@ namespace Dnn.CakeUtils
     public static class Packaging
     {
         [CakeMethodAlias]
-        public static void AddResourceZip(this ICakeContext context, Solution solution, Project project, string devPath, string packagePath)
+        public static void AddResourceZip(this ICakeContext context, Solution solution, Project project, DirectoryPath devPath, FilePath packagePath)
         {
             var releaseFiles = project.pathsAndFiles.releaseFiles == null ? solution.dnn.pathsAndFiles.releaseFiles : project.pathsAndFiles.releaseFiles;
             if (releaseFiles.Length > 0)
@@ -34,7 +35,7 @@ namespace Dnn.CakeUtils
             }
         }
         [CakeMethodAlias]
-        public static void AddScripts(this ICakeContext context, Solution solution, Project project, string packagePath)
+        public static void AddScripts(this ICakeContext context, Solution solution, Project project, FilePath packagePath)
         {
             if (!string.IsNullOrEmpty(project.pathsAndFiles.pathToScripts))
             {
@@ -43,7 +44,7 @@ namespace Dnn.CakeUtils
             }
         }
         [CakeMethodAlias]
-        public static void AddCleanupFiles(this ICakeContext context, Solution solution, Project project, string packagePath)
+        public static void AddCleanupFiles(this ICakeContext context, Solution solution, Project project, FilePath packagePath)
         {
             if (!string.IsNullOrEmpty(project.pathsAndFiles.pathToCleanupFiles))
             {
@@ -52,7 +53,7 @@ namespace Dnn.CakeUtils
             }
         }
         [CakeMethodAlias]
-        public static void AddLicenseAndReleaseNotes(this ICakeContext context, Solution solution, Project project, string packagePath)
+        public static void AddLicenseAndReleaseNotes(this ICakeContext context, Solution solution, Project project, FilePath packagePath)
         {
             if (!string.IsNullOrEmpty(project.pathsAndFiles.licenseFile))
             {

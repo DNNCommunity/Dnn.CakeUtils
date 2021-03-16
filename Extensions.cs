@@ -53,12 +53,11 @@ namespace Dnn.CakeUtils
             res.LoadXml(value);
             return res;
         }
-        public static bool Contains(this FilePathCollection input, string filePath)
+        public static bool Contains(this FilePathCollection input, FilePath filePath)
         {
-            filePath = filePath.Replace("\\", "/");
             foreach (var fp in input)
             {
-                if (fp.FullPath == filePath)
+                if (fp.FullPath == filePath.FullPath)
                 {
                     return true;
                 }
