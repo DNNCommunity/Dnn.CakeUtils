@@ -2,6 +2,7 @@
 using System.IO;
 
 using Cake.Common.Diagnostics;
+using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -68,7 +69,7 @@ namespace Dnn.CakeUtils
 
         public static string ReadFile(this ICakeContext context, FilePath filePath)
         {
-            return ReadFile(filePath);
+            return ReadFile(context.MakeAbsolute(filePath));
         }
 
         public static string ReadFile(FilePath filePath)

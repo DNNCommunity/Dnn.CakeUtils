@@ -1,5 +1,6 @@
 ﻿using System.IO;
 
+using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.IO;
 
@@ -11,11 +12,11 @@ namespace Dnn.CakeUtils
     {
         public static string ToHtml(this ICakeContext context, FilePath fileName)
         {
-            if (File.Exists(fileName.FullPath))
+            if (context.FileExists(fileName))
             {
                 var input = "";
                 var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-                using (var sr = new StreamReader(fileName.FullPath))
+                using (var sr = new StreamReader(context.MakeAbsolute(fileName).FullPath))
                 {
                     input = sr.ReadToEnd();
                 }
