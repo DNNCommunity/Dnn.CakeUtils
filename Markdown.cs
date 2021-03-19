@@ -1,17 +1,22 @@
-﻿using Markdig;
-using System.IO;
+﻿using System.IO;
+
+using Cake.Common.IO;
+using Cake.Core;
+using Cake.Core.IO;
+
+using Markdig;
 
 namespace Dnn.CakeUtils
 {
-    public class Markdown
+    public static class Markdown
     {
-        public static string ToHtml(string fileName)
+        public static string ToHtml(this ICakeContext context, FilePath fileName)
         {
-            if (File.Exists(fileName))
+            if (context.FileExists(fileName))
             {
                 var input = "";
                 var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-                using (var sr = new StreamReader(fileName))
+                using (var sr = new StreamReader(context.MakeAbsolute(fileName).FullPath))
                 {
                     input = sr.ReadToEnd();
                 }

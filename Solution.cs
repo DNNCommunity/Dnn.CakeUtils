@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using Cake.Core.IO;
+
+using Newtonsoft.Json;
 
 namespace Dnn.CakeUtils
 {
@@ -9,7 +12,7 @@ namespace Dnn.CakeUtils
         public string version { get; set; }
         public string description { get; set; }
         public DnnSolution dnn { get; set; }
-        public static Solution New(string packageJsonFilePath)
+        public static Solution New(FilePath packageJsonFilePath)
         {
             var sln = JsonConvert.DeserializeObject<Solution>(Utilities.ReadFile(packageJsonFilePath));
             foreach (var folder in sln.dnn.projectFolders)

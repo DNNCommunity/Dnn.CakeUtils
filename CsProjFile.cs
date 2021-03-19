@@ -1,17 +1,19 @@
 ﻿using System.Xml;
 
+using Cake.Core.IO;
+
 namespace Dnn.CakeUtils
 {
     public class CsProjFile : XmlDocument
     {
-        private string FilePath { get; set; }
+        private FilePath FilePath { get; set; }
 
         public bool IsNetCore { get; set; } = false;
 
-        public CsProjFile(string filePath)
+        public CsProjFile(FilePath filePath)
         {
             FilePath = filePath;
-            base.Load(filePath);
+            base.Load(filePath.FullPath);
             if (this.DocumentElement.HasAttribute("Sdk"))
             {
                 IsNetCore = true;
@@ -60,9 +62,9 @@ namespace Dnn.CakeUtils
         {
             Write(FilePath);
         }
-        public void Write(string filePath)
+        public void Write(FilePath filePath)
         {
-            Save(filePath);
+            Save(filePath.FullPath);
         }
 
     }
