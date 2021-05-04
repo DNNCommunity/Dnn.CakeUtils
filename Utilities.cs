@@ -13,13 +13,30 @@ namespace Dnn.CakeUtils
         public static void UpdateAssemblyInfo(this ICakeContext context, Solution sln, FilePath filePath)
         {
             var ai = new AssemblyInfo(filePath);
-            ai.SetProperty("AssemblyVersion", sln.version);
-            ai.SetProperty("AssemblyFileVersion", sln.version);
-            ai.SetProperty("AssemblyTitle", sln.name);
-            ai.SetProperty("AssemblyDescription", sln.description);
-            ai.SetProperty("AssemblyCompany", sln.dnn.owner.organization);
-            ai.SetProperty("AssemblyCopyright", $"Copyright {System.DateTime.Now.Year} by {sln.dnn.owner.organization}");
-            ai.Write();
+            var project = filePath.FindProjectForPath(sln);
+            if (project != null)
+            {
+                ai.SetProperty("AssemblyVersion", project.version ?? sln.version);
+                ai.SetProperty("AssemblyFileVersion", project.version ?? sln.version);
+                if (project.owner == null)
+                {
+                    ai.SetProperty("AssemblyTitle", sln.name);
+                    ai.SetProperty("AssemblyDescription", sln.description);
+                    ai.SetProperty("AssemblyCompany", sln.dnn.owner.organization);
+                    ai.SetProperty("AssemblyCopyright", $"Copyright {System.DateTime.Now.Year} by {sln.dnn.owner.organization}");
+                }
+                ai.Write();
+            }
+            else
+            {
+                ai.SetProperty("AssemblyVersion", sln.version);
+                ai.SetProperty("AssemblyFileVersion", sln.version);
+                ai.SetProperty("AssemblyTitle", sln.name);
+                ai.SetProperty("AssemblyDescription", sln.description);
+                ai.SetProperty("AssemblyCompany", sln.dnn.owner.organization);
+                ai.SetProperty("AssemblyCopyright", $"Copyright {System.DateTime.Now.Year} by {sln.dnn.owner.organization}");
+                ai.Write();
+            }
         }
 
         public static void UpdateAssemblyInfoVersion(this ICakeContext context, Version version, string informationalVersion, FilePath filePath)
@@ -41,13 +58,30 @@ namespace Dnn.CakeUtils
             {
                 return;
             }
-            projFile.SetProperty("AssemblyVersion", sln.version);
-            projFile.SetProperty("FileVersion", sln.version);
-            projFile.SetProperty("Product", sln.name);
-            projFile.SetProperty("Description", sln.description);
-            projFile.SetProperty("Company", sln.dnn.owner.organization);
-            projFile.SetProperty("Copyright", $"Copyright {System.DateTime.Now.Year} by {sln.dnn.owner.organization}");
-            projFile.Write();
+            var project = filePath.FindProjectForPath(sln);
+            if (project != null)
+            {
+                projFile.SetProperty("AssemblyVersion", project.version ?? sln.version);
+                projFile.SetProperty("FileVersion", project.version ?? sln.version);
+                if (project.owner == null)
+                {
+                    projFile.SetProperty("Product", sln.name);
+                    projFile.SetProperty("Description", sln.description);
+                    projFile.SetProperty("Company", sln.dnn.owner.organization);
+                    projFile.SetProperty("Copyright", $"Copyright {System.DateTime.Now.Year} by {sln.dnn.owner.organization}");
+                }
+                projFile.Write();
+            }
+            else
+            {
+                projFile.SetProperty("AssemblyVersion", sln.version);
+                projFile.SetProperty("FileVersion", sln.version);
+                projFile.SetProperty("Product", sln.name);
+                projFile.SetProperty("Description", sln.description);
+                projFile.SetProperty("Company", sln.dnn.owner.organization);
+                projFile.SetProperty("Copyright", $"Copyright {System.DateTime.Now.Year} by {sln.dnn.owner.organization}");
+                projFile.Write();
+            }
         }
 
         public static string GetTextOrMdFile(this ICakeContext context, FilePath filePathWithExtension)

@@ -84,5 +84,19 @@ namespace Dnn.CakeUtils
         {
             return input.Replace('/', '.').Replace('\\', '.');
         }
+        public static Project FindProjectForPath(this FilePath input, Solution solution)
+        {
+            var fileFolder = System.IO.Path.GetDirectoryName(input.FullPath);
+            foreach (var pf in solution.dnn.projectFolders)
+            {
+                var projectPath = System.IO.Path.Combine(solution.BasePath, pf.Replace("/", "\\"));
+                if (fileFolder.StartsWith(projectPath, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine("Bingo");
+                    return solution.dnn.projects[pf];
+                }
+            }
+            return null;
+        }
     }
 }

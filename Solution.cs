@@ -12,9 +12,12 @@ namespace Dnn.CakeUtils
         public string version { get; set; }
         public string description { get; set; }
         public DnnSolution dnn { get; set; }
+        public string BasePath { get; set; }
         public static Solution New(FilePath packageJsonFilePath)
         {
             var sln = JsonConvert.DeserializeObject<Solution>(Utilities.ReadFile(packageJsonFilePath));
+            var f = new System.IO.FileInfo(packageJsonFilePath.FullPath);
+            sln.BasePath = f.DirectoryName;
             foreach (var folder in sln.dnn.projectFolders)
             {
                 var subproject = JsonConvert.DeserializeObject<Project>(Utilities.ReadFile(folder + "\\dnn.json"));
