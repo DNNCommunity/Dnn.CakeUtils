@@ -7,19 +7,36 @@ namespace Dnn.CakeUtils
     public class Project
     {
         public string name { get; set; }
+
+        public string version { get; set; }
+
+        public Owner owner { get; set; }
+
         [JsonConverter(typeof(StringEnumConverter))]
         public ProjectType projectType { get; set; }
+
         public string friendlyName { get; set; }
+
         public string description { get; set; }
+
         public string dnnDependency { get; set; }
+
         public string packageName { get; set; }
+
         public string folder { get; set; }
+
         public string iconFile { get; set; }
+
         public bool packageSeparately { get; set; } = false;
+
         public DnnModule module { get; set; }
+
         public DnnConfig config { get; set; }
+
         public DnnAuthSystem authenticationSystem { get; set; }
+
         public PersonaBarMenu personaBarMenu { get; set; }
+
         public ProjectPathsAndFiles pathsAndFiles { get; set; }
     }
 

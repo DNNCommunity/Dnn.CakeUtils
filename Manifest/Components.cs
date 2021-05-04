@@ -197,5 +197,24 @@ namespace Dnn.CakeUtils.Manifest
             rf.AddChildElement("parent", project.personaBarMenu.parent);
             rf.AddChildElement("order", project.personaBarMenu.order.ToString());
         }
+
+        public static void AddOwner(this XmlNode parent, Owner projectOwner, Owner slnOwner)
+        {
+            var owner = parent.SetChildElement("owner");
+            if (projectOwner == null)
+            {
+                owner.SetChildElement("name", slnOwner.name);
+                owner.SetChildElement("organization", slnOwner.organization);
+                owner.SetChildElement("url", slnOwner.url);
+                owner.SetChildElement("email", slnOwner.email);
+            }
+            else
+            {
+                owner.SetChildElement("name", projectOwner.name);
+                owner.SetChildElement("organization", projectOwner.organization);
+                owner.SetChildElement("url", projectOwner.url);
+                owner.SetChildElement("email", projectOwner.email);
+            }
+        }
     }
 }

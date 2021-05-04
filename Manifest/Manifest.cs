@@ -48,16 +48,12 @@ namespace Dnn.CakeUtils.Manifest
             var package = PackagesNode.AddChildElement("package");
             package.AddAttribute("name", project.packageName);
             // Set core attributes
-            package.SetAttribute("version", Solution.version);
+            package.SetAttribute("version", project.version ?? Solution.version);
             package.SetChildElement("friendlyName", project.friendlyName);
             package.SetChildElement("description", project.description.Otherwise(Solution.description));
             package.SetChildElement("iconFile", project.iconFile);
             // Add owner
-            var owner = package.SetChildElement("owner");
-            owner.SetChildElement("name", Solution.dnn.owner.name);
-            owner.SetChildElement("organization", Solution.dnn.owner.organization);
-            owner.SetChildElement("url", Solution.dnn.owner.url);
-            owner.SetChildElement("email", Solution.dnn.owner.email);
+            package.AddOwner(project.owner, Solution.dnn.owner);
             // core dependency
             var coreRef = string.IsNullOrEmpty(project.dnnDependency) ?
                 Common.GetCoreDependency(Solution.dnn.pathsAndFiles.pathToAssemblies) :
