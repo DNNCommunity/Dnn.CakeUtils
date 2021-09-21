@@ -114,6 +114,10 @@ namespace Dnn.CakeUtils.Manifest
                     components.AddScripts(project, Solution.version, Solution.dnn.pathsAndFiles.packageScriptsFolder);
                     components.AddAssemblies(project, Solution.dnn.pathsAndFiles.pathToAssemblies, Solution.dnn.pathsAndFiles.packageAssembliesFolder);
                     components.AddCleanupFiles(project, Solution.dnn.pathsAndFiles.packageCleanupFolder);
+                    if (project.mustIncludeResources)
+                    {
+                        components.AddResourceComponent(project);
+                    }
                     package.AppendChild(components);
                     break;
                 case ProjectType.skin:

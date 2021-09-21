@@ -29,6 +29,8 @@ namespace Dnn.CakeUtils
 
         public bool packageSeparately { get; set; } = false;
 
+        public bool mustIncludeResources { get; set; } = false;
+
         public DnnModule module { get; set; }
 
         public DnnConfig config { get; set; }
