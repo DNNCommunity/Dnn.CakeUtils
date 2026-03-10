@@ -114,7 +114,7 @@ namespace Dnn.CakeUtils
                     context.DeleteFile(zipFile);
                 }
             }
-            using (var outFile = File.Open(zipFile.FullPath, FileMode.OpenOrCreate))
+            using (var outFile = File.Open(zipFile.FullPath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 using (var outStream = new ZipArchive(outFile, append ? ZipArchiveMode.Update : ZipArchiveMode.Create))
                 {

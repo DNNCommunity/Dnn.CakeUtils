@@ -7,16 +7,16 @@
     <Description>Utilities to support Cake scripts for building and packaging DNN extensions</Description>
     <PackageProjectUrl>https://github.com/DNNCommunity/Dnn.CakeUtils</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/DNNCommunity/Dnn.CakeUtils/blob/master/LICENSE</PackageLicenseUrl>
-    <Version>2.0.2</Version>
-    <AssemblyVersion>2.0.2.0</AssemblyVersion>
-    <FileVersion>2.0.2.0</FileVersion>
+    <Version>2.1.0</Version>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Common" Version="1.0.0" />
-    <PackageReference Include="Cake.Core" Version="1.0.0" />
+    <PackageReference Include="Cake.Common" Version="1.3.0" />
+    <PackageReference Include="Cake.Core" Version="1.3.0" />
     <PackageReference Include="Markdig" Version="0.20.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>
