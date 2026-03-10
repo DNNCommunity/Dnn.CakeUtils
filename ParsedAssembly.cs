@@ -81,12 +81,5 @@ namespace Dnn.CakeUtils
         <bindingRedirect oldVersion=""0.0.0.0-32767.32767.32767.32767"" newVersion=""{Version}""/>
       </dependentAssembly>";
     }
-
-    public XmlNode AssemblyBindingRedirectAsXml()
-    {
-      var doc = new XmlDocument();
-      doc.LoadXml(this.AssemblyBindingRedirect());
-      return doc.DocumentElement;
-    }
   }
 }
