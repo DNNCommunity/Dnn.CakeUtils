@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace Dnn.CakeUtils.Manifest
@@ -50,23 +48,6 @@ namespace Dnn.CakeUtils.Manifest
         }
       }
       return res.ToNormalizedVersion();
-    }
-
-    public static List<ParsedAssembly> GetAssemblies(string assemblyPath)
-    {
-      var res = new List<ParsedAssembly>();
-      foreach (var file in Directory.GetFiles(assemblyPath, "*.dll", SearchOption.TopDirectoryOnly).OrderBy(f => f))
-      {
-        try
-        {
-          res.Add(new ParsedAssembly(Assembly.LoadFile(file)));
-        }
-        catch
-        {
-          // ignore assemblies we can't load
-        }
-      }
-      return res;
     }
   }
 }
