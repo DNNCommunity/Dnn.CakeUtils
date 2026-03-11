@@ -128,6 +128,23 @@ namespace Dnn.CakeUtils
       context.Information("Added resources from " + path);
     }
 
+    public static List<ParsedAssembly> ParseAssemblies(this FilePathCollection assemblies)
+    {
+      var res = new List<ParsedAssembly>();
+      foreach (var file in assemblies)
+      {
+        try
+        {
+          res.Add(new ParsedAssembly(Assembly.LoadFile(file.FullPath)));
+        }
+        catch
+        {
+          // ignore assemblies we can't load
+        }
+      }
+      return res;
+    }
+
     public static List<ParsedAssembly> GetAssemblies(string assemblyPath)
     {
       var res = new List<ParsedAssembly>();
