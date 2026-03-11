@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Xml;
@@ -114,13 +114,20 @@ namespace Dnn.CakeUtils
                     context.DeleteFile(zipFile);
                 }
             }
-            using (var outFile = File.Open(zipFile.FullPath, FileMode.OpenOrCreate, FileAccess.Write))
+            var zipExists = context.FileExists(zipFile);
+            var zipMode = append && zipExists ? ZipArchiveMode.Update : ZipArchiveMode.Create;
+            var fileAccess = zipMode == ZipArchiveMode.Update ? FileAccess.ReadWrite : FileAccess.Write;
+
+            using (var outFile = File.Open(zipFile.FullPath, FileMode.OpenOrCreate, fileAccess))
             {
-                using (var outStream = new ZipArchive(outFile, append ? ZipArchiveMode.Update : ZipArchiveMode.Create))
+                using (var outStream = new ZipArchive(outFile, zipMode))
                 {
                     context.Information("Zipping " + name);
                     var entry = outStream.CreateEntry(name);
-                    fileToZip.CopyTo(entry.Open());
+                    using (var entryStream = entry.Open())
+                    {
+                        fileToZip.CopyTo(entryStream);
+                    }
                 }
             }
         }

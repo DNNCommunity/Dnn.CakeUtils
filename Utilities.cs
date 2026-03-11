@@ -1,4 +1,4 @@
-﻿using Cake.Common.Diagnostics;
+using Cake.Common.Diagnostics;
 using Cake.Common.IO;
 using Cake.Core;
 using Cake.Core.IO;
@@ -135,7 +135,8 @@ namespace Dnn.CakeUtils
       {
         try
         {
-          res.Add(new ParsedAssembly(Assembly.LoadFile(file.FullPath)));
+          var assemblyBytes = File.ReadAllBytes(file.FullPath);
+          res.Add(new ParsedAssembly(Assembly.Load(assemblyBytes)));
         }
         catch
         {
@@ -152,7 +153,8 @@ namespace Dnn.CakeUtils
       {
         try
         {
-          res.Add(new ParsedAssembly(Assembly.LoadFile(file)));
+          var assemblyBytes = File.ReadAllBytes(file);
+          res.Add(new ParsedAssembly(Assembly.Load(assemblyBytes)));
         }
         catch
         {
