@@ -34,6 +34,12 @@ namespace Dnn.CakeUtils
       this.Version = details.Version.ToString();
       this.PublicKeyToken = ReadPublicKey(details);
 
+      var references = assembly.GetReferencedAssemblies();
+      foreach (var reference in references.OrderBy(r => r.Name))
+      {
+        References.Add($"{reference.Name} {reference.Version}");
+      }
+
       try
       {
         var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
@@ -51,13 +57,6 @@ namespace Dnn.CakeUtils
       catch (Exception ex)
       {
         this.Exception = $"Error reading TargetFrameworkAttribute: {ex.Message}";
-        return;
-      }
-
-      var references = assembly.GetReferencedAssemblies();
-      foreach (var reference in references.OrderBy(r => r.Name))
-      {
-        References.Add($"{reference.Name} {reference.Version}");
       }
     }
 
