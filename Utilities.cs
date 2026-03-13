@@ -130,7 +130,7 @@ namespace Dnn.CakeUtils
 
     public static List<ParsedAssembly> ParseAssemblies(this FilePathCollection assemblies)
     {
-      var res = new List<ParsedAssembly>();
+      var res = new List<ParsedAssembly>(assemblies.Count);
       foreach (var file in assemblies)
       {
         try
