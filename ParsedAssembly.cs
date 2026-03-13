@@ -14,7 +14,6 @@ namespace Dnn.CakeUtils
   {
     public string Name { get; set; } = "";
     public string PublicKeyToken { get; set; } = "";
-    public string FilePath { get; set; } = "";
     public string Version { get; set; } = "";
     public string TargetFramework { get; set; } = "";
     public string TargetFrameworkVersion { get; set; } = "";
@@ -33,21 +32,19 @@ namespace Dnn.CakeUtils
 
       this.Name = details.Name;
       this.Version = details.Version.ToString();
+      this.PublicKeyToken = ReadPublicKey(details);
 
       try
       {
-        var targetFrameworkAttributes = assembly.CustomAttributes
-              .Where(attribute => attribute.AttributeType.Name == nameof(TargetFrameworkAttribute));
-        var customAttribute = targetFrameworkAttributes.FirstOrDefault();
-        var customAttributeValue = customAttribute?.ConstructorArguments.FirstOrDefault().Value.ToString();
-        this.PublicKeyToken = ReadPublicKey(details);
-        if (string.IsNullOrEmpty(customAttributeValue))
+        var targetFrameworkAttribute = assembly.GetCustomAttribute<TargetFrameworkAttribute>();
+        var frameworkName = targetFrameworkAttribute?.FrameworkName;
+        if (string.IsNullOrEmpty(frameworkName))
         {
           this.Exception = "No TargetFrameworkAttribute found";
           return;
         }
 
-        var parts = customAttributeValue.Split(',');
+        var parts = frameworkName.Split(',');
         TargetFramework = parts[0];
         TargetFrameworkVersion = parts[1];
       }
