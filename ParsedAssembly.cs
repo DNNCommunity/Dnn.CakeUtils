@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Versioning;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -10,8 +11,6 @@ namespace Dnn.CakeUtils
 {
   public class ParsedAssembly
   {
-    private static readonly Regex PublicKeyTokenRegex = new Regex(@"PublicKeyToken=(\w+)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
-
     public string Name { get; set; } = "";
     public string PublicKeyToken { get; set; } = "";
     public string FilePath { get; set; } = "";
@@ -36,9 +35,9 @@ namespace Dnn.CakeUtils
 
       try
       {
-        var targetFrameWorkAttributes = assembly.CustomAttributes
+        var targetFrameworkAttributes = assembly.CustomAttributes
               .Where(attribute => attribute.AttributeType.Name == nameof(TargetFrameworkAttribute));
-        var customAttribute = targetFrameWorkAttributes.FirstOrDefault();
+        var customAttribute = targetFrameworkAttributes.FirstOrDefault();
         var customAttributeValue = customAttribute?.ConstructorArguments.FirstOrDefault().Value.ToString();
         this.PublicKeyToken = ReadPublicKey(details);
         if (string.IsNullOrEmpty(customAttributeValue))
@@ -64,14 +63,21 @@ namespace Dnn.CakeUtils
       }
     }
 
-    private string ReadPublicKey(AssemblyName assemblyName)
+    private static string ReadPublicKey(AssemblyName assemblyName)
     {
-      if (assemblyName == null || !assemblyName.Flags.HasFlag(AssemblyNameFlags.PublicKey))
+      var publicKeyToken = assemblyName.GetPublicKeyToken();
+      if (publicKeyToken == null || publicKeyToken.Length == 0)
       {
         return null;
       }
 
-      return PublicKeyTokenRegex.Match(assemblyName.FullName).Groups[1].Value;
+      var builder = new StringBuilder(publicKeyToken.Length * 2);
+      foreach (var b in publicKeyToken)
+      {
+        builder.AppendFormat($"{b:x2}");
+      }
+		
+      return builder.ToString();
     }
 
     public string AssemblyBindingRedirect()
