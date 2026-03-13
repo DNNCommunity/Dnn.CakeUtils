@@ -6,6 +6,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace Dnn.CakeUtils
 {
@@ -80,12 +81,18 @@ namespace Dnn.CakeUtils
       return builder.ToString();
     }
 
-    public string AssemblyBindingRedirect()
+    public XElement AssemblyBindingRedirect()
     {
-      return $@"      <dependentAssembly>
-        <assemblyIdentity name=""{this.Name}"" publicKeyToken=""{PublicKeyToken}"" culture=""neutral"" />
-        <bindingRedirect oldVersion=""0.0.0.0-32767.32767.32767.32767"" newVersion=""{Version}""/>
-      </dependentAssembly>";
+      XNamespace asm = "urn:schemas-microsoft-com:asm.v1";
+      return new XElement(asm + "dependentAssembly",
+        new XElement(
+          asm + "assemblyIdentity",
+          new XAttribute("name", this.Name),
+          this.PublicKeyToken is null ? null : new XAttribute("publicKeyToken", this.PublicKeyToken)),
+        new XElement(
+          asm + "bindingRedirect",
+          new XAttribute("oldVersion", "0.0.0.0-32767.32767.32767.32767"),
+          new XAttribute("newVersion", this.Version)));
     }
   }
 }
